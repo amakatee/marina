@@ -1,7 +1,7 @@
-import { getProviders, signIn, signOut, useSession } from "next-auth/react";
-import { AppProps } from "next/app";
+import { getProviders, signIn } from "next-auth/react";
+import { type AppProps } from "next/app";
 
-import type { GetServerSideProps } from "next";
+import  { type GetServerSideProps } from "next";
 
 export default function Signin({providers} : {providers: AppProps}) {
 
@@ -10,7 +10,7 @@ export default function Signin({providers} : {providers: AppProps}) {
     <div>
         {Object.values(providers).map((provider) => (
             <button
-            key={provider.id}
+            key={provider.id }
             onClick={() => void signIn(provider.id, {
                 callbackUrl: `${window.location.origin}`
             })}
