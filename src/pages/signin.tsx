@@ -1,13 +1,14 @@
-import { getProviders, signIn } from "next-auth/react";
-import { type AppProps } from "next/app";
+// import { getProviders, signIn } from "next-auth/react";
+// import { type AppProps } from "next/app";
 
-import  { type GetServerSideProps } from "next";
+// import  { type GetServerSideProps } from "next";
 
-export default function Signin({providers} : {providers: AppProps}) {
+export default function Signin() {
 
   return (
     <>
-    <div>
+    hello
+    {/* <div>
         {Object.values(providers).map((provider) => (
             <button
             key={provider.id }
@@ -19,15 +20,15 @@ export default function Signin({providers} : {providers: AppProps}) {
 
             </button>
         ))}
-    </div>
+    </div> */}
     </>
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-    const providers = await getProviders()
-    return {
-        props: { providers}
-    }
-}
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//     const providers = await getProviders()
+//     return {
+//         props: { providers}
+//     }
+// }
 
