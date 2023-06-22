@@ -36,31 +36,31 @@ export function NewProductForm() {
             setInputVal("")
             
             if(session.status !== "authenticated") return
-            trpcUtils.product.infiniteFeed.setInfiniteData({}, (oldData : any  ) => {
-                console.log(oldData, oldData.pages[0])
-                if(oldData == null || oldData?.pages == null) return 
+            // trpcUtils.product.infiniteFeed.setInfiniteData({}, (oldData : any  ) => {
+            //     console.log(oldData, oldData.pages[0])
+            //     if(oldData == null || oldData?.pages == null) return 
 
-                const newCacheProduct = {
-                    ...newProduct,
-                    likeCount: 0,
-                    user: {
-                        id: session.data.user.id,
-                        name: session.data.user.name || null
-                    }
-                }
-                return {
-                    ...oldData,
-                    pages: [
-                        {
-                            ...oldData.pages[0],
-                            products: [newCacheProduct, ...oldData.pages[0].products]
+            //     const newCacheProduct = {
+            //         ...newProduct,
+            //         likeCount: 0,
+            //         user: {
+            //             id: session.data.user.id,
+            //             name: session.data.user.name || null
+            //         }
+            //     }
+            //     return {
+            //         ...oldData,
+            //         pages: [
+            //             {
+            //                 ...oldData.pages[0],
+            //                 products: [newCacheProduct, ...oldData.pages[0].products]
  
-                        },
-                        //   ...oldData.pages.slice[1]
-                    ]
+            //             },
+            //             //   ...oldData.pages.slice[1]
+            //         ]
 
-                }
-            } )
+            //     }
+            // } )
 
            
       
