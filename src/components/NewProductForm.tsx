@@ -17,13 +17,15 @@ function updateTextAreaSize(textArea? : HTMLTextAreaElement){
 // }
 
 export function NewProductForm() {
+    const session = useSession()
     const [inputVal, setInputVal] = useState("") 
     const textAreaRef = useRef<HTMLTextAreaElement>()
     const inputRef = useCallback((textArea: HTMLTextAreaElement) => {
         updateTextAreaSize(textArea)
         textAreaRef.current = textArea
     }, [])
-
+    
+    const trpcUtils = api.useContext()
     useLayoutEffect(() => {
         updateTextAreaSize(textAreaRef.current)
     }, [inputVal])
@@ -32,8 +34,38 @@ export function NewProductForm() {
         onSuccess: newProduct => {
             console.log(newProduct)
             setInputVal("")
-        }
-    })
+            
+            if(session.status !== "authenticated") return
+            trpcUtils.product.infiniteFeed.setInfiniteData({}, (oldData) => {
+                console.log(oldData)
+                if(oldData == null || oldData?.pages == null) return 
+
+                const newCacheProduct = {
+                    ...newProduct,
+                    likeCount: 0,
+                    user: {
+                        id: session.data.user.id,
+                        name: session.data.user.name
+                    }
+                }
+                return {
+                    ...oldData,
+                    pages: [
+                        {
+                            ...oldData.pages[0],
+                            products: [newCacheProduct, ...oldData.pages[0].products]
+ 
+                        },
+                        // ...oldData.pages.slice[1]
+                    ]
+
+                }
+            } )
+
+           
+      
+           
+        }})
     function handleSubmit( e: FormEvent) {
         e.preventDefault()
         createProduct.mutate({content: inputVal})
