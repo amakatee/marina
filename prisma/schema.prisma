@@ -16,6 +16,31 @@ model Example {
 }
 
 // Necessary for Next auth
+
+model Product {
+    id String @id @default(uuid())
+    userId String
+    content String
+    createdAt DateTime @default(now())
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    like Like[]
+    @@index([userId])
+    @@unique([createdAt, id])
+}
+
+model Like {
+    userId    String
+    productId String
+    user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+    @@id([userId, productId])
+    @@index ([userId])
+    @@index ([productId])
+
+
+}
 model Account {
     id                String  @id @default(cuid())
     userId            String
@@ -52,6 +77,8 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+    products      Product[]
+    likes         Like[]
 }
 
 model VerificationToken {
