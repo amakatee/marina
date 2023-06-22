@@ -12,11 +12,11 @@ type Product = {
 type InfiniteProductsListProps = {
     isLoading: boolean,
     isError: boolean,
-    hasMore: boolean ,
+    hasMore: boolean  ,
     fetchNewProducts: () => Promise<unknown>,
     products: Product[] | undefined
 }
-export function InfiniteProductsList({products, isError, isLoading, hasMore, fetchNewProducts }: InfiniteProductsListProps) {
+export function InfiniteProductsList({products, isError, isLoading, hasMore = false, fetchNewProducts }: InfiniteProductsListProps) {
     if(isLoading) return <h1>Loading...</h1>
     if(isError) return <h1>Error ...</h1>
     if(products == null) return null

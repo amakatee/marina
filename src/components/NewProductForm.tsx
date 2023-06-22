@@ -36,8 +36,8 @@ export function NewProductForm() {
             setInputVal("")
             
             if(session.status !== "authenticated") return
-            trpcUtils.product.infiniteFeed.setInfiniteData({}, (oldData) => {
-                console.log(oldData)
+            trpcUtils.product.infiniteFeed.setInfiniteData({}, (oldData : any  ) => {
+                console.log(oldData, oldData.pages[0])
                 if(oldData == null || oldData?.pages == null) return 
 
                 const newCacheProduct = {
@@ -45,7 +45,7 @@ export function NewProductForm() {
                     likeCount: 0,
                     user: {
                         id: session.data.user.id,
-                        name: session.data.user.name
+                        name: session.data.user.name || null
                     }
                 }
                 return {
@@ -56,7 +56,7 @@ export function NewProductForm() {
                             products: [newCacheProduct, ...oldData.pages[0].products]
  
                         },
-                        // ...oldData.pages.slice[1]
+                        //   ...oldData.pages.slice[1]
                     ]
 
                 }
