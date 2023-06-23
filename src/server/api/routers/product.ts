@@ -20,7 +20,7 @@ export const productRouter = createTRPCRouter({
       orderBy: [{createdAt: "desc"}, {id: "desc"}],
       select: {
         id:true,
-        content: true,
+        description: true,
         createdAt:true,
         _count: {select: {like:true}},
         user: {
@@ -40,7 +40,7 @@ export const productRouter = createTRPCRouter({
       products: data.map((product) => {
       return {
         id: product.id,
-        content: product.content,
+        description: product.description,
         createdAt: product.createdAt,
         likeCount: product._count.like,
         user: product.user,
@@ -49,10 +49,11 @@ export const productRouter = createTRPCRouter({
     }) , nextCursor}
   }),
   create: protectedProcedure
-     .input(z.object({content: z.string()}))
-     .mutation(async ({ input: { content }, ctx}) => {
+     .input(z.object({description: z.string(), title: z.string(), 
+    price: z.string(), quantity: z.number() }))
+     .mutation(async ({ input: { description , title, price, quantity}, ctx}) => {
        const product = await ctx.prisma.product.create({
-         data: {content, userId: ctx.session.user.id}
+         data: {description, price, quantity ,title, userId: ctx.session.user.id}
         })
         return product
      })

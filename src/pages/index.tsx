@@ -6,10 +6,15 @@ import { NewProductForm } from "~/components/NewProductForm";
 import { InfiniteProductsList } from "~/components/InfiniteProductsList";
 
 function Home() {
+  const session = useSession()
+  const user = session.data?.user
+
   
   return (
     <>
-     <NewProductForm />
+  
+    <p className="text-sm ">Logged in as {user?.name}</p>
+
      <RecentProducts />
      
     </>

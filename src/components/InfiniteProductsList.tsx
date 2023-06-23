@@ -3,7 +3,10 @@ import Link from "next/link"
 
 type Product = {
     id: string,
-    content: string,
+    title: string,
+    quantity: number,
+    price: string,
+    description: string,
     createdAt: Date,
     likeCount: number,
     user: { id: string, name: string | null}
@@ -43,10 +46,10 @@ export function InfiniteProductsList({products, isError, isLoading, hasMore = fa
 }
 const dateTimeFormatter = Intl.DateTimeFormat(undefined, { dateStyle: "short"})
 
-function ProductCard({ id, user, content, createdAt, likeCount} : Product) {
+function ProductCard({ id, user, description, createdAt, likeCount} : Product) {
     return <li className="flex gap-4 border-b px-4 py-4">
         <Link href={`/products/${id}`}>
-            <p className="whitespace-pre-wrap">{content}</p>
+            <p className="whitespace-pre-wrap">{description}</p>
         </Link>
         <div>{dateTimeFormatter.format(createdAt)}</div>
 

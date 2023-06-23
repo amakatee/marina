@@ -19,6 +19,7 @@ function updateTextAreaSize(textArea? : HTMLTextAreaElement){
 export function NewProductForm() {
     const session = useSession()
     const [inputVal, setInputVal] = useState("") 
+    const [titleVal, setTitleVal] = useState("")
     const textAreaRef = useRef<HTMLTextAreaElement>()
     const inputRef = useCallback((textArea: HTMLTextAreaElement) => {
         updateTextAreaSize(textArea)
@@ -69,17 +70,24 @@ export function NewProductForm() {
         }})
     function handleSubmit( e: FormEvent) {
         e.preventDefault()
-        createProduct.mutate({content: inputVal})
+        createProduct.mutate({description: inputVal, title: "duhfuash", quantity: 3, price:"600"})
     }
 
     return <form onSubmit={handleSubmit} className="flex flex-col gap-2 border-b py-2">
-        <div className="flex gap-4 ">
+        <div className="flex flex-col gap-4 ">
+            <p className="px-4">Create new product</p>
+            <input
+            value={titleVal}
+            onChange={(e) => setTitleVal(e.target.value)}
+            placeholder="Product title"
+            className="flex-grow resize-none overflow-hidden px-4 text-lg outline-none"
+            />
             <textarea 
             ref={inputRef}
             style={{height: 0}}
             value={inputVal}
             onChange={e => setInputVal(e.target.value)}
-            className="flex-grow resize-none overflow-hidden p-4 text-lg outline-none"
+            className="flex-grow resize-none overflow-hidden px-4 text-lg outline-none"
             placeholder="Product Description" />
         </div>
         <Button className="self-end">Save Product</Button>
