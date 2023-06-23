@@ -20,6 +20,9 @@ export const productRouter = createTRPCRouter({
       orderBy: [{createdAt: "desc"}, {id: "desc"}],
       select: {
         id:true,
+        title: true,
+        price:true,
+        quantity:true,
         description: true,
         createdAt:true,
         _count: {select: {like:true}},
@@ -40,10 +43,14 @@ export const productRouter = createTRPCRouter({
       products: data.map((product) => {
       return {
         id: product.id,
+        title: product.title,
+        qunatity: product.quantity,
+        price: product.price,
         description: product.description,
         createdAt: product.createdAt,
         likeCount: product._count.like,
         user: product.user,
+
 
       }
     }) , nextCursor}

@@ -2,13 +2,13 @@ import InfiniteScroll from "react-infinite-scroll-component"
 import Link from "next/link"
 
 type Product = {
-    id: string,
-    title: string,
-    quantity: number,
-    price: string,
-    description: string,
-    createdAt: Date,
-    likeCount: number,
+    id: string;
+    title: string;
+    qunatity: number;
+    price: string;
+    description: string | null;
+    createdAt: Date;
+    likeCount: number;
     user: { id: string, name: string | null}
 }
 

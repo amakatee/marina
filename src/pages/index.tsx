@@ -3,8 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { api } from "~/utils/api";
 import { NewProductForm } from "~/components/NewProductForm";
-import { InfiniteProductsList } from "~/components/InfiniteProductsList";
-
+import { InfiniteProductsList } from "~/components/InfiniteProductsList"
 function Home() {
   const session = useSession()
   const user = session.data?.user

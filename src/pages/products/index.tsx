@@ -19,10 +19,11 @@ function Products() {
 
   
 }
+
 function RecentProducts () {
   const products = api.product.infiniteFeed.useInfiniteQuery({},
     {getNextPageParam: (lastPage) => lastPage.nextCursor})
-
+  
   return <InfiniteProductsList 
   products={products.data?.pages.flatMap((page) => page.products)}
   isError={products.isError}
