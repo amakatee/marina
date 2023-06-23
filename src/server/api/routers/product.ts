@@ -44,7 +44,7 @@ export const productRouter = createTRPCRouter({
       return {
         id: product.id,
         title: product.title,
-        qunatity: product.quantity,
+        quantity: product.quantity,
         price: product.price,
         description: product.description,
         createdAt: product.createdAt,

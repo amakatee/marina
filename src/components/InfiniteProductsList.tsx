@@ -4,7 +4,7 @@ import Link from "next/link"
 type Product = {
     id: string;
     title: string;
-    qunatity: number;
+    quantity: number;
     price: string;
     description: string | null;
     createdAt: Date;
