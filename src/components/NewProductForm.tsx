@@ -3,7 +3,9 @@ import { Button } from "./Button"
 import { useSession } from "next-auth/react"
 import { api } from "~/utils/api"
 import type { FormEvent } from "react"
-import {v4 } from 'uuid';
+import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
+import { arrayBuffer } from "stream/consumers"
+
 
 function updateTextAreaSize(textArea? : HTMLTextAreaElement){
     if (textArea == null) return
@@ -35,23 +37,18 @@ export function NewProductForm() {
 
     const createProduct = api.product.create.useMutation({
         onSuccess: newProduct => {
-            console.log(newProduct)
             setInputVal("")
-            
             if(session.status !== "authenticated") return
             trpcUtils.product.infiniteFeed.setInfiniteData({}, (oldData) => {
                 if (oldData == null || oldData.pages[0] == null) return;
-        
-                const newCacheProduct = {
+                 const newCacheProduct = {
                   ...newProduct,
                   likeCount: 0,
                   user: {
                     id: session.data.user.id,
                     name: session.data.user.name || null,
-                   
                   },
                 };
-        
                 return {
                   ...oldData,
                   pages: [
@@ -61,15 +58,8 @@ export function NewProductForm() {
                     },
                     ...oldData.pages.slice(1),
                   ],
+                }})}})
 
-                }
-            } )
-
-           
-           
-
-
-        }})
     function handleSubmit( e: FormEvent) {
         e.preventDefault()
         createProduct.mutate({description: inputVal, title: "duhfuash", quantity: 3, price:"600"})
@@ -84,9 +74,16 @@ export function NewProductForm() {
   
     const [variationsArr, setVariationsArr] = useState(VariationsInput)
     
-    function addVariations() {
+    function addVariation() {
       const list = [...variationsArr, { colorValue:"", sizeValue:"", qtyValue:""}]
       setVariationsArr(list)
+    }
+
+    function removeVariation(i:number) {
+      const list = [...variationsArr]
+      list.splice(i, 1)
+      setVariationsArr(list)
+      return
     }
     
     function updateInputState (e: React.ChangeEvent<HTMLInputElement>, i:number) {
@@ -94,83 +91,15 @@ export function NewProductForm() {
        const newArr = variationsArr.map((item, index) => {
          if(i === index) {
            return { ...item, [name]:value }
-         }
-         else {
+         } else {
            return item
-         }
-       })
+         }})
        setVariationsArr(newArr)
-
-
-     }
-
-  
-
-    return <form onSubmit={handleSubmit} className="flex flex-col gap-2 border-b py-2">
+      }
+    
+      return <form onSubmit={handleSubmit} className="flex flex-col gap-2 border-b py-2">
         <div className="flex flex-col gap-4 ">
             <p className="px-4">Create new product</p>
-           
-
-          
-
-            <div className="w-full bg-[pink]">
-              <p> Add Products Variations</p>
-              {variationsArr.map((item, i) => (
-                <div key={i} onClick={(e) => {
-                  e.preventDefault()
-                  console.log(variationsArr)
-                }}>
-                <input 
-                name="sizeValue"
-                placeholder="size"
-                value={item.sizeValue}
-                type="text"
-                onChange={e => updateInputState(e, i)
-              }
-
-                />
-                <input 
-                name="colorValue"
-                placeholder="color"
-                value={item.colorValue}
-                type="text"
-                onChange={e => updateInputState(e, i)}
-
-                />
-                <input 
-                name="qtyValue"
-                placeholder="qty"
-                value={item.qtyValue}
-                type="text"
-                onChange={e => updateInputState(e, i)}
-
-                />
-                 <button type="submit">Save variations</button>
-                </div>
-               
-              ))}
-              <button onClick={addVariations}>Add varioation:</button>
-              <button>Save variations</button>
-            </div>
-            
-
-            {/* <div className="flex flex-col gap-4">
-              
-              <p>Add Colors: </p>
-              <button onClick={addColorInput}>
-              Add Color:
-            </button>
-
-              {colorsArr.map((item, i) => {
-                return (
-                  <input
-                  className="bg-[orange]"
-
-                  />
-                )
-              })}
-              
-            </div> */}
             <input
             value={titleVal}
             onChange={(e) => setTitleVal(e.target.value)}
@@ -183,8 +112,54 @@ export function NewProductForm() {
             value={inputVal}
             onChange={e => setInputVal(e.target.value)}
             className="flex-grow resize-none overflow-hidden px-4 text-lg outline-none"
-            placeholder="Product Description" />
+            placeholder="Product Description" 
+            />
+            
+            <p> Add Products Variations</p>
+              <div className="w-full bg-[pink] flex flex-col gap-3"> 
+              {variationsArr.map((item, i) => (
+                <div 
+                key={i} 
+                className="flex items-center justify-between"
+                onClick={(e) => {
+                  e.preventDefault()
+                  console.log(variationsArr)
+                }}>
+                <input 
+                className="resize-none overflow-hidden px-4 text-lg outline-none"
+                name="sizeValue"
+                placeholder="size"
+                value={item.sizeValue}
+                type="text"
+                onChange={e => updateInputState(e, i)}
+                />
+
+                <input 
+                className="resize-none overflow-hidden px-4 text-lg outline-none"
+                name="colorValue"
+                placeholder="color"
+                value={item.colorValue}
+                type="text"
+                onChange={e => updateInputState(e, i)}
+
+                />
+                <input 
+                className="resize-none overflow-hidden px-4 text-lg outline-none"
+                name="qtyValue"
+                placeholder="qty"
+                value={item.qtyValue}
+                type="text"
+                onChange={e => updateInputState(e, i)}
+
+                />
+                <button className="p-2" onClick={addVariation}><AiOutlinePlus /></button>
+                <button className="p-2" onClick={e => removeVariation(i)}><AiOutlineMinus /></button>
+              </div>
+              ))}
+              <button type="submit">Save variations</button>
+            </div>
         </div>
+
         <Button className="self-end">Save Product</Button>
 
     </form>

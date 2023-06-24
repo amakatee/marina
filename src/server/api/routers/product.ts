@@ -63,6 +63,22 @@ export const productRouter = createTRPCRouter({
          data: {description, price, quantity ,title, userId: ctx.session.user.id}
         })
         return product
+     }),
+
+
+  deleteProduct: protectedProcedure
+     .input(
+       z.object({
+         id: z.string()
+       }))
+     .mutation(async({input: {id}, ctx}) => {
+       return await ctx.prisma.product.delete({
+         where: {
+           id
+         }
+       })
      })
  
-});
+ });
+ 
+ 

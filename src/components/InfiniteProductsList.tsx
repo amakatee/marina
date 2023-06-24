@@ -1,5 +1,6 @@
 import InfiniteScroll from "react-infinite-scroll-component"
 import Link from "next/link"
+import { api } from "~/utils/api"
 
 type Product = {
     id: string;
@@ -46,12 +47,16 @@ export function InfiniteProductsList({products, isError, isLoading, hasMore = fa
 }
 const dateTimeFormatter = Intl.DateTimeFormat(undefined, { dateStyle: "short"})
 
+
 function ProductCard({ id, user, description, createdAt, likeCount} : Product) {
+    const deleteProduct = api.product.deleteProduct.useMutation()
     return <li className="flex gap-4 border-b px-4 py-4">
         <Link href={`/products/${id}`}>
             <p className="whitespace-pre-wrap">{description}</p>
+            <button onClick={() => deleteProduct.mutate({id: id})}>delete p</button>
         </Link>
         <div>{dateTimeFormatter.format(createdAt)}</div>
+       
 
 
         
