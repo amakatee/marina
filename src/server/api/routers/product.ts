@@ -25,7 +25,7 @@ export const productRouter = createTRPCRouter({
         price:true,
         quantity:true,
         description: true,
-        variants: { select: {id: true, color: true, size: true, qty: true, productId:true}},
+        variants: { select: { color: true, size: true, qty: true, }},
         createdAt:true,
         _count: {select: {like:true}},
         user: {
@@ -64,10 +64,10 @@ export const productRouter = createTRPCRouter({
        title: z.string(), 
        price: z.string(), 
        quantity: z.number(),
-       variants: z.array(z.object({id: z.string(), color: z.string(),
+       variants: z.array(z.object({ color: z.string(),
        size: z. string(),
        qty: z.string(),
-       productId: z.string()
+      
       })) 
       }))
      .mutation(async ({ input: { description , title, price, variants, quantity}, ctx}) => {

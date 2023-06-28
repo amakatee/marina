@@ -3,13 +3,19 @@ import Link from "next/link"
 import { api } from "~/utils/api"
 import { type Variants} from "@prisma/client";
 import { useState } from "react";
+
+type Variant = {
+    color: string;
+    size: string;
+    qty: string;
+}
 type Product = {
     id: string;
     title: string;
     quantity: number;
     price: string;
     description: string | null;
-    variants: Variants[] | undefined
+    variants: Variant[] | undefined
     createdAt: Date;
     likeCount?: number;
     user: { id: string, name: string | null}
@@ -30,6 +36,8 @@ export function InfiniteProductsList({products, isError, isLoading, hasMore = fa
     if( products == null || products.length === 0 ) {
         return <h2>No products</h2>
     }
+
+    
 
 
     return <ul>
@@ -57,8 +65,8 @@ const dateTimeFormatter = Intl.DateTimeFormat(undefined, { dateStyle: "short"})
 function ProductCard({ id, description, variants, createdAt} : Product) {
     const deleteProduct = api.product.deleteProduct.useMutation()
     
-    const [currentColorValue, setCurrentColorValue] = useState<Variants[]>() 
-    const [currentSizeValue, setCurrentSizeValue] = useState<Variants[]>()
+    const [currentColorValue, setCurrentColorValue] = useState<Variant[]>() 
+    const [currentSizeValue, setCurrentSizeValue] = useState<Variant[]>()
     console.log(currentColorValue,  currentSizeValue)
     
   const result = currentColorValue?.filter((colorarr ) => {

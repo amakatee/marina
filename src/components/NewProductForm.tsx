@@ -4,6 +4,8 @@ import { useSession } from "next-auth/react"
 import { api } from "~/utils/api"
 import type { FormEvent } from "react"
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
+import { Variants } from "@prisma/client"
+import {v4} from 'uuid'
 
 
 
@@ -31,7 +33,7 @@ export function NewProductForm() {
       color: "",
       size: "",
       qty: "",
-      productId: ""
+
     }]
   
     const [variationsArr, setVariationsArr] = useState(VariationsInput)
@@ -54,7 +56,7 @@ export function NewProductForm() {
                 if (oldData == null || oldData.pages[0] == null) return;
                  const newCacheProduct = {
                   ...newProduct,
-                  variants: variationsArr || [{id: "ds", color :"", size: "", qty: "", productId: newProduct.id}] ,
+                  variants: variationsArr || [{ color :"", size: "", qty: ""}] ,
                  
                   likeCount: 0,
                   user: {
@@ -82,7 +84,7 @@ export function NewProductForm() {
    
     
     function addVariation() {
-      const list = [...variationsArr, {id: "", color:"", size:"", qty:"", productId: ""}]
+      const list = [...variationsArr, {id: "", color:"", size:"", qty:""}]
       setVariationsArr(list)
     }
 
