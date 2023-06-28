@@ -12,7 +12,7 @@ type Product = {
     description: string | null;
     variants: Variants[] | undefined
     createdAt: Date;
-    // likeCount: number;
+    likeCount?: number;
     user: { id: string, name: string | null}
 }
 
@@ -90,16 +90,8 @@ function ProductCard({ id, user, description, variants, createdAt} : Product) {
 
                 <div className="bg-[pink] flex flex-col gap-3">
                    <div className="flex gap-2"> {nonDuplicateColor?.map((color, i) => <div key={i} className={`${style}`} onClick={() => {
-                    //    setStyle("bg-[blue]")
-                    if(result?.map(r => r.qty === "0")) {
-                        console.log("0")
-                        setStyle("bg-[grey]")
-
-                    } else if(result?.map(r => parseInt(r.qty) > 0)) {
-                        console.log("1")
-                        setStyle("bg-[green]")
-
-                    }
+                  
+                    
     
                        const currentVariant = variants?.filter(variant => variant.color === color)
                        setCurrentColorValue(currentVariant)

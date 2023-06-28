@@ -27,9 +27,11 @@ export function NewProductForm() {
     const textAreaRef = useRef<HTMLTextAreaElement>()
 
     const VariationsInput = [{
+      id: "",
       color: "",
       size: "",
-      qty: ""
+      qty: "",
+      productId: ""
     }]
   
     const [variationsArr, setVariationsArr] = useState(VariationsInput)
@@ -52,7 +54,7 @@ export function NewProductForm() {
                 if (oldData == null || oldData.pages[0] == null) return;
                  const newCacheProduct = {
                   ...newProduct,
-                  variants: variationsArr || [{color :"", size: "", qty: ""}] ,
+                  variants: variationsArr || [{id: "ds", color :"", size: "", qty: "", productId: newProduct.id}] ,
                  
                   likeCount: 0,
                   user: {
@@ -80,7 +82,7 @@ export function NewProductForm() {
    
     
     function addVariation() {
-      const list = [...variationsArr, { color:"", size:"", qty:""}]
+      const list = [...variationsArr, {id: "", color:"", size:"", qty:"", productId: ""}]
       setVariationsArr(list)
     }
 
