@@ -1,9 +1,7 @@
-import { signIn, signOut, useSession } from "next-auth/react";
-import Head from "next/head";
-import Link from "next/link";
+import {  useSession } from "next-auth/react";
 import { api } from "~/utils/api";
-import { NewProductForm } from "~/components/NewProductForm";
 import { InfiniteProductsList } from "~/components/InfiniteProductsList"
+
 function Home() {
   const session = useSession()
   const user = session.data?.user

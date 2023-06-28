@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react"
 import { api } from "~/utils/api"
 import type { FormEvent } from "react"
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
-import { arrayBuffer } from "stream/consumers"
+
 
 
 function updateTextAreaSize(textArea? : HTMLTextAreaElement){
@@ -160,7 +160,7 @@ export function NewProductForm() {
 
                 />
                 <button className="p-3 " onClick={addVariation}><AiOutlinePlus /></button>
-                <button className="p-3 " onClick={e => removeVariation(i)}><AiOutlineMinus /></button>
+                <button className="p-3 " onClick={() => removeVariation(i)}><AiOutlineMinus /></button>
               </div>
               ))}
 

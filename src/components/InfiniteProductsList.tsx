@@ -1,9 +1,8 @@
 import InfiniteScroll from "react-infinite-scroll-component"
 import Link from "next/link"
 import { api } from "~/utils/api"
-import { Variants} from "@prisma/client";
+import { type Variants} from "@prisma/client";
 import { useState } from "react";
-import { RequestCookiesAdapter } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 type Product = {
     id: string;
     title: string;
@@ -55,7 +54,7 @@ const dateTimeFormatter = Intl.DateTimeFormat(undefined, { dateStyle: "short"})
 
 
 
-function ProductCard({ id, user, description, variants, createdAt} : Product) {
+function ProductCard({ id, description, variants, createdAt} : Product) {
     const deleteProduct = api.product.deleteProduct.useMutation()
     
     const [currentColorValue, setCurrentColorValue] = useState<Variants[]>() 
@@ -76,7 +75,7 @@ function ProductCard({ id, user, description, variants, createdAt} : Product) {
         return variant.size
     })
      const nonDuplicateSize = sizeVariants?.filter((size, index) => sizeVariants.indexOf(size) === index)
-     const [style , setStyle] = useState("bg-pink") 
+   
     
 
     return <li className="flex gap-4 border-b px-4 py-4">
@@ -89,7 +88,7 @@ function ProductCard({ id, user, description, variants, createdAt} : Product) {
            
 
                 <div className="bg-[pink] flex flex-col gap-3">
-                   <div className="flex gap-2"> {nonDuplicateColor?.map((color, i) => <div key={i} className={`${style}`} onClick={() => {
+                   <div className="flex gap-2"> {nonDuplicateColor?.map((color, i) => <div key={i}  onClick={() => {
                   
                     
     
@@ -107,7 +106,7 @@ function ProductCard({ id, user, description, variants, createdAt} : Product) {
 
                    }}>{size}</div>)}</div>
                    <div>{qty1 && qty1 || 0}pieces</div>
-                   <div className="flex gap-2">{variants?.map(variant => <div>{variant.qty}</div>)}</div>  
+                   <div className="flex gap-2">{variants?.map((variant,i) => <div key={i}>{variant.qty}</div>)}</div>  
                 </div>
         </div>
        

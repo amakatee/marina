@@ -2,7 +2,7 @@
 import { api } from "~/utils/api";
 import { NewProductForm } from "~/components/NewProductForm";
 import { InfiniteProductsList } from "~/components/InfiniteProductsList";
-import { useSession } from "next-auth/react";
+
 
 function Products() {
     
