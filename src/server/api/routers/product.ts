@@ -90,11 +90,11 @@ export const productRouter = createTRPCRouter({
        z.object({
          id: z.string()
        }))
-     .mutation(async({input: {id}, ctx}) => {
+     .mutation(async({input, ctx}) => {
        try {
         return await ctx.prisma.product.delete({
           where: {
-            id
+            id: input.id
           }
         })
        } catch (error) {

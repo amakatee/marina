@@ -45,7 +45,7 @@ model Variants {
     size  String
     qty   String
     productId String 
-    product Product @relation(fields: [productId], references: [id], onDelete: NoAction)
+    product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
    @@index(productId)
 }
 

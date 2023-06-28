@@ -63,7 +63,11 @@ const dateTimeFormatter = Intl.DateTimeFormat(undefined, { dateStyle: "short"})
 
 
 function ProductCard({ id, description, variants, createdAt} : Product) {
-    const deleteProduct = api.product.deleteProduct.useMutation()
+    const deleteProduct = api.product.deleteProduct.useMutation(
+        {onSuccess: (data) => {
+        console.log(data)
+
+    }})
     
     const [currentColorValue, setCurrentColorValue] = useState<Variant[]>() 
     const [currentSizeValue, setCurrentSizeValue] = useState<Variant[]>()
@@ -89,8 +93,11 @@ function ProductCard({ id, description, variants, createdAt} : Product) {
     return <li className="flex gap-4 border-b px-4 py-4">
         <Link href={`/products/${id}`}>
             <p className="whitespace-pre-wrap">{description}</p>
-            <button onClick={() => deleteProduct.mutate({id: id})}>delete p</button>
         </Link>
+        <button className="" onClick={() => {
+            deleteProduct.mutate({id: id})
+        }}>delete product</button>
+
         <div>{dateTimeFormatter.format(createdAt)}</div>
         <div>
            

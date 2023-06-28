@@ -57,7 +57,6 @@ export function NewProductForm() {
                  const newCacheProduct = {
                   ...newProduct,
                   variants: variationsArr || [{ color :"", size: "", qty: ""}] ,
-                 
                   likeCount: 0,
                   user: {
                     id: session.data.user.id,
@@ -166,7 +165,8 @@ export function NewProductForm() {
               </div>
               ))}
 
-              <Button className="self-end">Save Variation</Button>            </div>
+                   
+                </div>
         </div>
 
         <Button className="self-end">Save Product</Button>
