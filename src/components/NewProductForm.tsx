@@ -25,6 +25,15 @@ export function NewProductForm() {
     const [inputVal, setInputVal] = useState("") 
     const [titleVal, setTitleVal] = useState("")
     const textAreaRef = useRef<HTMLTextAreaElement>()
+
+    const VariationsInput = [{
+      color: "",
+      size: "",
+      qty: ""
+    }]
+  
+    const [variationsArr, setVariationsArr] = useState(VariationsInput)
+
     const inputRef = useCallback((textArea: HTMLTextAreaElement) => {
         updateTextAreaSize(textArea)
         textAreaRef.current = textArea
@@ -43,6 +52,8 @@ export function NewProductForm() {
                 if (oldData == null || oldData.pages[0] == null) return;
                  const newCacheProduct = {
                   ...newProduct,
+                  variants: variationsArr || [{color :"", size: "", qty: ""}] ,
+                 
                   likeCount: 0,
                   user: {
                     id: session.data.user.id,
@@ -62,20 +73,14 @@ export function NewProductForm() {
 
     function handleSubmit( e: FormEvent) {
         e.preventDefault()
-        createProduct.mutate({description: inputVal, title: "duhfuash", quantity: 3, price:"600"})
+        createProduct.mutate({description: inputVal, title: "", quantity: 0, price:"600", variants: variationsArr || [{color: "", size: "", qty: ""}]})
     }
 
-
-    const VariationsInput = [{
-      colorValue: "",
-      sizeValue: "",
-      qtyValue: ""
-    }]
-  
-    const [variationsArr, setVariationsArr] = useState(VariationsInput)
+    console.log(variationsArr)
+   
     
     function addVariation() {
-      const list = [...variationsArr, { colorValue:"", sizeValue:"", qtyValue:""}]
+      const list = [...variationsArr, { color:"", size:"", qty:""}]
       setVariationsArr(list)
     }
 
@@ -116,48 +121,48 @@ export function NewProductForm() {
             />
             
             <p> Add Products Variations</p>
-              <div className="w-full bg-[pink] flex flex-col gap-3"> 
+              <div className=" bg-[pink] flex flex-col gap-3"> 
               {variationsArr.map((item, i) => (
                 <div 
                 key={i} 
-                className="flex items-center justify-between"
+                className="flex items-center justify-between gap-1"
                 onClick={(e) => {
                   e.preventDefault()
                   console.log(variationsArr)
                 }}>
                 <input 
-                className="resize-none overflow-hidden px-4 text-lg outline-none"
-                name="sizeValue"
+                className="resize-none overflow-hidden p-2 text-lg outline-none"
+                name="size"
                 placeholder="size"
-                value={item.sizeValue}
+                value={item.size}
                 type="text"
                 onChange={e => updateInputState(e, i)}
                 />
 
                 <input 
-                className="resize-none overflow-hidden px-4 text-lg outline-none"
-                name="colorValue"
+                className="resize-none overflow-hidden p-2 text-lg outline-none"
+                name="color"
                 placeholder="color"
-                value={item.colorValue}
+                value={item.color}
                 type="text"
                 onChange={e => updateInputState(e, i)}
 
                 />
                 <input 
-                className="resize-none overflow-hidden px-4 text-lg outline-none"
-                name="qtyValue"
+                className="resize-none overflow-hidden p-2 text-lg outline-none"
+                name="qty"
                 placeholder="qty"
-                value={item.qtyValue}
+                value={item.qty}
                 type="text"
                 onChange={e => updateInputState(e, i)}
 
                 />
-                <button className="p-2" onClick={addVariation}><AiOutlinePlus /></button>
-                <button className="p-2" onClick={e => removeVariation(i)}><AiOutlineMinus /></button>
+                <button className="p-3 " onClick={addVariation}><AiOutlinePlus /></button>
+                <button className="p-3 " onClick={e => removeVariation(i)}><AiOutlineMinus /></button>
               </div>
               ))}
-              <button type="submit">Save variations</button>
-            </div>
+
+              <Button className="self-end">Save Variation</Button>            </div>
         </div>
 
         <Button className="self-end">Save Product</Button>

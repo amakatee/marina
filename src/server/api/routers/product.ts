@@ -5,6 +5,7 @@ import {
   protectedProcedure,
 } from "~/server/api/trpc";
 
+
 export const productRouter = createTRPCRouter({
   infiniteFeed: publicProcedure
   .input(
@@ -24,6 +25,7 @@ export const productRouter = createTRPCRouter({
         price:true,
         quantity:true,
         description: true,
+        variants: { select: {color: true, size: true, qty: true}},
         createdAt:true,
         _count: {select: {like:true}},
         user: {
@@ -40,13 +42,14 @@ export const productRouter = createTRPCRouter({
    
     }
     return {
-      products: data.map((product) => {
+      products: data.map((product) => {console.log(product)
       return {
         id: product.id,
         title: product.title,
         quantity: product.quantity,
         price: product.price,
         description: product.description,
+        variants: product.variants,
         createdAt: product.createdAt,
         likeCount: product._count.like,
         user: product.user,
@@ -56,11 +59,26 @@ export const productRouter = createTRPCRouter({
     }) , nextCursor}
   }),
   create: protectedProcedure
-     .input(z.object({description: z.string(), title: z.string(), 
-    price: z.string(), quantity: z.number() }))
-     .mutation(async ({ input: { description , title, price, quantity}, ctx}) => {
+     .input(z.object({
+       description: z.string(), 
+       title: z.string(), 
+       price: z.string(), 
+       quantity: z.number(),
+       variants: z.array(z.object({color: z.string(),
+       size: z. string(),
+       qty: z.string()
+      })) 
+      }))
+     .mutation(async ({ input: { description , title, price, variants, quantity}, ctx}) => {
+       console.log(variants)
+
        const product = await ctx.prisma.product.create({
-         data: {description, price, quantity ,title, userId: ctx.session.user.id}
+         data: {description,
+          price, 
+          quantity ,
+          title ,
+          variants: {create: variants}, 
+          userId: ctx.session.user.id}
         })
         return product
      }),
@@ -72,11 +90,15 @@ export const productRouter = createTRPCRouter({
          id: z.string()
        }))
      .mutation(async({input: {id}, ctx}) => {
-       return await ctx.prisma.product.delete({
-         where: {
-           id
-         }
-       })
+       try {
+        return await ctx.prisma.product.delete({
+          where: {
+            id
+          }
+        })
+       } catch (error) {
+         console.log(error) 
+        }
      })
  
  });

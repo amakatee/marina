@@ -24,13 +24,9 @@ model Product {
     description String?
     price String
     quantity Int
-    // color Color[]
-    // size  Size[]
-    // categories Category[]
-    // categoryId String?
+    variants Variants[]
     createdAt DateTime @default(now())
-   
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    user User @relation(fields: [userId], references: [id])
     like Like[]
 
     @@index([userId])
@@ -43,22 +39,18 @@ model Product {
 //     createdAt DateTime @default(now())
 //     products Product[]
 // }
-// model Color {
-//     id String @id @default(uuid())
-//     color String
-//     productId String @unique
-//     product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-   
-// }
+model Variants {
+    id String @id @default(uuid())
+    color String
+    size  String
+    qty   String
+    productId String 
+    product Product @relation(fields: [productId], references: [id], onDelete: NoAction)
+   @@index(productId)
+}
 
 
 
-// model Size { 
-//     id String @id @default(uuid())
-//     size String
-//     productId String @unique
-//     product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-// }
 
 
 model Like {
