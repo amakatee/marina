@@ -71,8 +71,8 @@ function ProductCard({ id, description, variants, images, createdAt} : Product) 
 
     const trpcUtils = api.useContext()
     const deleteProduct = api.product.deleteProduct.useMutation(
-        {onSuccess: () => {
-        trpcUtils.product.invalidate()}})
+        {onSuccess: async () => {
+        await trpcUtils.product.invalidate()}})
     
     const [currentColorValue, setCurrentColorValue] = useState<Variant[]>() 
     const [currentSizeValue, setCurrentSizeValue] = useState<Variant[]>()
