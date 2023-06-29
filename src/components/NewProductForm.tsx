@@ -4,10 +4,11 @@ import { useSession } from "next-auth/react"
 import { api } from "~/utils/api"
 import type { FormEvent } from "react"
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
-import { Variants } from "@prisma/client"
-import {v4} from 'uuid'
 
+import { UploadButton } from "~/utils/uploadthing";
 
+import type { OurFileRouter } from "~/app/api/uploadthing/core";
+import { fileURLToPath } from "url"
 
 function updateTextAreaSize(textArea? : HTMLTextAreaElement){
     if (textArea == null) return
@@ -27,12 +28,18 @@ export function NewProductForm() {
     const [inputVal, setInputVal] = useState("") 
     const [titleVal, setTitleVal] = useState("")
     const textAreaRef = useRef<HTMLTextAreaElement>()
+    const [images, setImages] = useState<{
+      fileUrl: string;
+      fileKey: string;
+  }[] | undefined>([])  
+
+
 
     const VariationsInput = [{
       id: "",
       color: "",
       size: "",
-      qty: "",
+      qty: 0,
 
     }]
   
@@ -56,7 +63,8 @@ export function NewProductForm() {
                 if (oldData == null || oldData.pages[0] == null) return;
                  const newCacheProduct = {
                   ...newProduct,
-                  variants: variationsArr || [{ color :"", size: "", qty: ""}] ,
+                  variants: variationsArr || [{ color :"", size: "", qty: 0}] ,
+                  images: images || [{fileKey:"", fileUrl: ""}],
                   likeCount: 0,
                   user: {
                     id: session.data.user.id,
@@ -76,24 +84,18 @@ export function NewProductForm() {
 
     function handleSubmit( e: FormEvent) {
         e.preventDefault()
-        createProduct.mutate({description: inputVal, title: "", quantity: 0, price:"600", variants: variationsArr || [{color: "", size: "", qty: ""}]})
+        createProduct.mutate({description: inputVal, title: "", quantity: 0, price:"600", variants: variationsArr || [{color: "", size: "", qty: 0}], images:images})
     }
-
-    console.log(variationsArr)
-   
-    
     function addVariation() {
-      const list = [...variationsArr, {id: "", color:"", size:"", qty:""}]
+      const list = [...variationsArr, {id: "", color:"", size:"", qty:0}]
       setVariationsArr(list)
     }
-
     function removeVariation(i:number) {
       const list = [...variationsArr]
       list.splice(i, 1)
       setVariationsArr(list)
       return
     }
-    
     function updateInputState (e: React.ChangeEvent<HTMLInputElement>, i:number) {
        const { name, value} = e.target
        const newArr = variationsArr.map((item, index) => {
@@ -104,7 +106,11 @@ export function NewProductForm() {
          }})
        setVariationsArr(newArr)
       }
-    
+
+
+     
+
+      const newImages = images?.map(image => <img key={image.fileUrl} src={image.fileUrl} width={100} />)
       return <form onSubmit={handleSubmit} className="flex flex-col gap-2 border-b py-2">
         <div className="flex flex-col gap-4 ">
             <p className="px-4">Create new product</p>
@@ -156,15 +162,36 @@ export function NewProductForm() {
                 name="qty"
                 placeholder="qty"
                 value={item.qty}
-                type="text"
+                type="number"
                 onChange={e => updateInputState(e, i)}
 
                 />
+                <div>
+             
+                </div>
+                 
+
+
                 <button className="p-3 " onClick={addVariation}><AiOutlinePlus /></button>
                 <button className="p-3 " onClick={() => removeVariation(i)}><AiOutlineMinus /></button>
               </div>
               ))}
 
+<UploadButton
+        endpoint="imageUploader"
+        
+        onClientUploadComplete={(res) => {
+          // Do something with the response
+          setImages(res)
+          console.log("Files: ", res);
+          alert("Upload Completed");
+        }}
+        onUploadError={(error: Error) => {
+          // Do something with the error.
+          alert(`ERROR! ${error.message}`);
+        }}
+      />
+  {newImages}
                    
                 </div>
         </div>

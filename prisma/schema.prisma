@@ -24,6 +24,7 @@ model Product {
     description String?
     price String
     quantity Int
+    images   Images[]
     variants Variants[]
     createdAt DateTime @default(now())
     user User @relation(fields: [userId], references: [id])
@@ -39,11 +40,21 @@ model Product {
 //     createdAt DateTime @default(now())
 //     products Product[]
 // }
+
+model Images {
+    id String @id @default(uuid())
+    fileUrl   String 
+    fileKey   String
+    productId String 
+    product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+    @@index(productId)
+
+}
 model Variants {
     id String @id @default(uuid())
     color String
     size  String
-    qty   String
+    qty   Int
     productId String 
     product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
    @@index(productId)

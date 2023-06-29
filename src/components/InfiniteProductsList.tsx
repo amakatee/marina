@@ -7,7 +7,11 @@ import { useState } from "react";
 type Variant = {
     color: string;
     size: string;
-    qty: string;
+    qty: number;
+}
+type Images = {
+    fileUrl: string,
+    fileKey: string
 }
 type Product = {
     id: string;
@@ -15,6 +19,7 @@ type Product = {
     quantity: number;
     price: string;
     description: string | null;
+    images: Images[] | undefined,
     variants: Variant[] | undefined
     createdAt: Date;
     likeCount?: number;
@@ -62,21 +67,21 @@ const dateTimeFormatter = Intl.DateTimeFormat(undefined, { dateStyle: "short"})
 
 
 
-function ProductCard({ id, description, variants, createdAt} : Product) {
-    const deleteProduct = api.product.deleteProduct.useMutation(
-        {onSuccess: (data) => {
-        console.log(data)
+function ProductCard({ id, description, variants, images, createdAt} : Product) {
 
-    }})
+    const trpcUtils = api.useContext()
+    const deleteProduct = api.product.deleteProduct.useMutation(
+        {onSuccess: () => {
+        trpcUtils.product.invalidate()}})
     
     const [currentColorValue, setCurrentColorValue] = useState<Variant[]>() 
     const [currentSizeValue, setCurrentSizeValue] = useState<Variant[]>()
-    console.log(currentColorValue,  currentSizeValue)
+
     
   const result = currentColorValue?.filter((colorarr ) => {
       return currentSizeValue?.find((sizearr) => sizearr.color === colorarr.color && sizearr.size === colorarr.size)
   })
-  console.log(result)
+
   const qty1 = result?.map(r => r?.qty)
   
     const colorVariants = variants?.map(variant => {
@@ -89,6 +94,10 @@ function ProductCard({ id, description, variants, createdAt} : Product) {
      const nonDuplicateSize = sizeVariants?.filter((size, index) => sizeVariants.indexOf(size) === index)
    
     
+     const [colorValue, setColorValue] = useState<string>()
+     console.log(colorValue)
+     const [sizeValue, setSizeValue] = useState<string>()
+     console.log(sizeValue)
 
     return <li className="flex gap-4 border-b px-4 py-4">
         <Link href={`/products/${id}`}>
@@ -101,26 +110,32 @@ function ProductCard({ id, description, variants, createdAt} : Product) {
         <div>{dateTimeFormatter.format(createdAt)}</div>
         <div>
            
-
+              
                 <div className="bg-[pink] flex flex-col gap-3">
-                   <div className="flex gap-2"> {nonDuplicateColor?.map((color, i) => <div key={i}  onClick={() => {
-                  
-                    
-    
+                   <div className="flex gap-2"> {nonDuplicateColor?.map((color, i) => <div
+                   key={i}  
+                   className={colorValue === color ? `bg-[blue]` : `bg-[pink]`   }
+            
+                   onClick={() => {
+                       setColorValue(color)
                        const currentVariant = variants?.filter(variant => variant.color === color)
                        setCurrentColorValue(currentVariant)
-
-                      
-                       
-                       
                    }}>{color}</div>)}</div>
-                   <div className="flex gap-2">{nonDuplicateSize?.map((size, i) => <div key={i} onClick={() => {
+                   <div className="flex gap-2">{nonDuplicateSize?.map((size, i) => <div 
+                    key={i} 
+                    className={sizeValue === size ? `bg-[blue]` : `bg-[pink]`}
+                    onClick={() => {
+                        setSizeValue(size)
+                        console.log(size, sizeValue)
                         const currentVariant = variants?.filter(variant => variant.size === size)
                         setCurrentSizeValue(currentVariant)
                         
 
                    }}>{size}</div>)}</div>
                    <div>{qty1 && qty1 || 0}pieces</div>
+                   <div>
+                       {images?.map(image => <img key={image.fileKey} src={image.fileUrl} width={300} />)}
+                   </div>
                    <div className="flex gap-2">{variants?.map((variant,i) => <div key={i}>{variant.qty}</div>)}</div>  
                 </div>
         </div>

@@ -25,6 +25,7 @@ export const productRouter = createTRPCRouter({
         price:true,
         quantity:true,
         description: true,
+        images: {select: {fileKey: true, fileUrl: true}},
         variants: { select: { color: true, size: true, qty: true, }},
         createdAt:true,
         _count: {select: {like:true}},
@@ -49,6 +50,7 @@ export const productRouter = createTRPCRouter({
         quantity: product.quantity,
         price: product.price,
         description: product.description,
+        images: product.images,
         variants: product.variants,
         createdAt: product.createdAt,
         likeCount: product._count.like,
@@ -64,13 +66,14 @@ export const productRouter = createTRPCRouter({
        title: z.string(), 
        price: z.string(), 
        quantity: z.number(),
+       images: z.array(z.object({ fileUrl: z.string(), fileKey: z.string()})).optional(),
        variants: z.array(z.object({ color: z.string(),
        size: z. string(),
-       qty: z.string(),
+       qty: z.number(),
       
       })) 
       }))
-     .mutation(async ({ input: { description , title, price, variants, quantity}, ctx}) => {
+     .mutation(async ({ input: { description , title, price, variants, quantity , images}, ctx}) => {
        console.log(variants)
 
        const product = await ctx.prisma.product.create({
@@ -78,6 +81,7 @@ export const productRouter = createTRPCRouter({
           price, 
           quantity ,
           title ,
+          images: {create: images},
           variants: {create: variants}, 
           userId: ctx.session.user.id}
         })
