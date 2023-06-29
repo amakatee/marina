@@ -1,4 +1,4 @@
-import { createUploadthing, type FileRouter } from "uploadthing/next";
+import { createUploadthing,  } from "uploadthing/next";
  
 const f = createUploadthing();
  
@@ -9,12 +9,12 @@ export const ourFileRouter = {
     imageUploader: f({ image: { maxFileSize: "4MB", maxFileCount: 8 } })
     .middleware(async ({ req }) => {
        
-        const user = await auth(req);
+        const user =  auth(req);
         if (!user) throw new Error("Unauthorized");
         return { userId: user.id };
       })
 
-      .onUploadComplete(async ({ metadata, file }) => {
+      .onUploadComplete( ({ metadata, file }) => {
 
         console.log("Upload complete for userId:", metadata.userId);
    

@@ -4,11 +4,11 @@ import { useSession } from "next-auth/react"
 import { api } from "~/utils/api"
 import type { FormEvent } from "react"
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai';
+import Image from "next/image"
 
 import { UploadButton } from "~/utils/uploadthing";
 
-import type { OurFileRouter } from "~/app/api/uploadthing/core";
-import { fileURLToPath } from "url"
+
 
 function updateTextAreaSize(textArea? : HTMLTextAreaElement){
     if (textArea == null) return
@@ -110,7 +110,7 @@ export function NewProductForm() {
 
      
 
-      const newImages = images?.map(image => <img key={image.fileUrl} src={image.fileUrl} width={100} />)
+      const newImages = images?.map(image => <Image key={image.fileUrl} src={image.fileUrl} width={100} alt="image" />)
       return <form onSubmit={handleSubmit} className="flex flex-col gap-2 border-b py-2">
         <div className="flex flex-col gap-4 ">
             <p className="px-4">Create new product</p>
