@@ -97,7 +97,7 @@ function ProductCard({ id, description, variants, images, createdAt} : Product) 
         </Link>
        
          <div className="w-30 h-auto">
-            {images &&  <img  className="w-[8rem] " src={images[0]?.fileUrl}/>} 
+            {images &&  <img  className="w-[8rem]" alt="image" src={images[0]?.fileUrl}/>} 
         </div>
        
         <div className="flex flex-col gap-3 ">
