@@ -66,7 +66,7 @@ const dateTimeFormatter = Intl.DateTimeFormat(undefined, { dateStyle: "short"})
 
 
 
-function ProductCard({ id, description, variants, images, createdAt} : Product) {
+function ProductCard({ id,title,  variants, images, createdAt} : Product) {
 
     const trpcUtils = api.useContext()
     const deleteProduct = api.product.deleteProduct.useMutation(
@@ -92,15 +92,16 @@ function ProductCard({ id, description, variants, images, createdAt} : Product) 
     
 
     return <li className="flex gap-4 border-b px-4 py-4">
-        <Link href={`/products/${id}`}>
-            <p className="whitespace-pre-wrap">{description}</p>
-        </Link>
        
-         <div className="w-30 h-auto">
+       
+         <div className=" h-auto flex flex-col items-center justify-between gap-3">
+         <Link href={`/products/${id}`}>
+            <p className="whitespace-pre-wrap">{title}</p>
+        </Link>
             {images &&  <img  className="w-[8rem]" alt="image" src={images[0]?.fileUrl}/>} 
         </div>
        
-        <div className="flex flex-col gap-3 ">
+        <div className="flex flex-col justify-between gap-2 ">
            <div className=" flex flex-col gap-3">
                    <div className="flex gap-2"> {nonDuplicateColor?.map((color, i) => <div
                    key={i}  
