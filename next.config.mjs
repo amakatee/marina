@@ -21,6 +21,15 @@ const config = {
   experimental: {
     esmExternals: false, // THIS IS THE FLAG THAT MATTERS
   },
+  images: {
+    remotePatterns:[
+      {
+        protocol:"http",
+        hostname: "lcoalhost"
+      }
+    ]
+  }
+ 
 };
 
 export default config;

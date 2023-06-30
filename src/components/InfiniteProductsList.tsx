@@ -2,7 +2,6 @@ import InfiniteScroll from "react-infinite-scroll-component"
 import Link from "next/link"
 import { api } from "~/utils/api"
 import { useState } from "react";
-import Image from 'next/image'
 
 type Variant = {
     color: string;
@@ -134,7 +133,7 @@ function ProductCard({ id, description, variants, images, createdAt} : Product) 
                    }}>{size}</div>)}</div>
                    <div>{qty1 && qty1 || 0}pieces</div>
                    <div>
-                       {images?.map(image => <img key={image.fileKey} src={image.fileUrl} width={100}  alt="image" />)}
+                       {images?.map(image => <img key={image.fileKey} src={image.fileUrl} width={100} height={30}  alt="image" />)}
                    </div>
                    <div className="flex gap-2">{variants?.map((variant,i) => <div key={i}>{variant.qty}</div>)}</div>  
                 </div>

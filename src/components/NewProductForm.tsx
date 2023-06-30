@@ -111,7 +111,7 @@ export function NewProductForm() {
 
      
 
-      const newImages = images?.map(image => <img key={image.fileUrl} src={image.fileUrl} width={30}  alt="image" />)
+      const newImages = images?.map(image => <img key={image.fileUrl} src={image.fileUrl} width={30} height={80}  alt="image" />)
       return <form onSubmit={handleSubmit} className="flex flex-col gap-2 border-b py-2">
         <div className="flex flex-col gap-4 ">
             <p className="px-4">Create new product</p>
