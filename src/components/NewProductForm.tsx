@@ -164,7 +164,16 @@ export function NewProductForm() {
                 placeholder="qty"
                 value={item.qty}
                 type="number"
-                onChange={e => updateInputState(e, i)}
+                onChange={e => {
+                  const { name, value} = e.target
+                  const newArr = variationsArr.map((item, index) => {
+                      if(i === index) {
+                         return { ...item, [name]:parseInt(value) }
+                      } else {
+                         return item
+                        }})
+                     setVariationsArr(newArr)
+                }}
 
                 />
                 <div>
