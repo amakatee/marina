@@ -200,6 +200,7 @@ export function NewProductForm() {
                 
                }}
                  onUploadError={(error: Error) => {
+                   console.log(error)
                  }}
                  />
                  <div className="flex items-center gap-2">
