@@ -28,8 +28,10 @@ const config = {
         fixStyle: "inline-type-imports",
       },
     ],
-    "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
-    "@next/next/no-img-element": "off"
+    "@typescript-eslint/no-unused-vars": "off",
+    //  ["warn", { argsIgnorePattern: "^_" }],
+    "@next/next/no-img-element": "off",
+    "@typescript-eslint/await-thenable": "off"
   },
   
 };
