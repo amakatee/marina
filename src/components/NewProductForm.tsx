@@ -85,7 +85,8 @@ export function NewProductForm() {
 
     function handleSubmit( e: FormEvent) {
         e.preventDefault()
-        createProduct.mutate({description: inputVal, title: "", quantity: 0, price:"600", variants: variationsArr || [{color: "", size: "", qty: 0}], images:images})
+        createProduct.mutate({description: inputVal, title: titleVal, quantity: 0, price:"600", variants: variationsArr || [], images:images})
+        setImages([])
     }
     function addVariation() {
       const list = [...variationsArr, {id: "", color:"", size:"", qty:0}]
@@ -113,25 +114,25 @@ export function NewProductForm() {
 
       const newImages = images?.map(image => <img key={image.fileUrl} src={image.fileUrl} width={30} height={80}  alt="image" />)
       return <form onSubmit={handleSubmit} className="flex flex-col gap-2 border-b py-2">
-        <div className="flex flex-col gap-4 ">
-            <p className="px-4">Create new product</p>
+        <div className="flex flex-col gap-4  px-4 lg:w-[50vw]">
+            <p className="">Create new product:</p>
             <input
             value={titleVal}
             onChange={(e) => setTitleVal(e.target.value)}
             placeholder="Product title"
-            className="flex-grow resize-none overflow-hidden px-4 text-lg outline-none"
+            className="flex-grow resize-none overflow-hidden  text-lg outline-none"
             />
             <textarea 
             ref={inputRef}
             style={{height: 0}}
             value={inputVal}
             onChange={e => setInputVal(e.target.value)}
-            className="flex-grow resize-none overflow-hidden px-4 text-lg outline-none"
+            className="flex-grow resize-none overflow-hidden text-lg outline-none"
             placeholder="Product Description" 
             />
             
-            <p> Add Products Variations</p>
-              <div className=" bg-[pink] flex flex-col gap-3"> 
+            <p className="text-sm py-1"> Add Products Variations:</p>
+              <div className="  flex flex-col gap-3"> 
               {variationsArr.map((item, i) => (
                 <div 
                 key={i} 
@@ -141,7 +142,8 @@ export function NewProductForm() {
                   console.log(variationsArr)
                 }}>
                 <input 
-                className="resize-none overflow-hidden p-2 text-lg outline-none"
+                className="focus:bg-indigo-100 focus:bg-indigo-100  block  rounded-md sm:text-sm bg-sky-100 
+                resize-none  overflow-hidden p-2 text-lg outline-none"
                 name="size"
                 placeholder="size"
                 value={item.size}
@@ -150,7 +152,8 @@ export function NewProductForm() {
                 />
 
                 <input 
-                className="resize-none overflow-hidden p-2 text-lg outline-none"
+                className="focus:bg-indigo-100 focus:bg-indigo-100  block  rounded-md sm:text-sm bg-sky-100
+                resize-none overflow-hidden p-2 text-lg outline-none"
                 name="color"
                 placeholder="color"
                 value={item.color}
@@ -159,7 +162,8 @@ export function NewProductForm() {
 
                 />
                 <input 
-                className="resize-none overflow-hidden p-2 text-lg outline-none"
+                className="focus:bg-indigo-100 focus:bg-indigo-100  block  rounded-md sm:text-sm bg-sky-100
+                resize-none overflow-hidden p-2 text-lg outline-none"
                 name="qty"
                 placeholder="qty"
                 value={item.qty}
@@ -182,25 +186,31 @@ export function NewProductForm() {
                  
 
 
-                <button className="p-3 " onClick={addVariation}><AiOutlinePlus /></button>
-                <button className="p-3 " onClick={() => removeVariation(i)}><AiOutlineMinus /></button>
+                <button className="p-3   block  rounded-md sm:text-sm bg-sky-100" onClick={addVariation}><AiOutlinePlus /></button>
+                <button className="p-3   block  rounded-md sm:text-sm bg-sky-100" onClick={() => removeVariation(i)}><AiOutlineMinus /></button>
               </div>
               ))}
 
-<UploadButton
-        endpoint="imageUploader"
-        onClientUploadComplete={(res) => {
-          setImages(res)
-          alert(" Completed");
-        }}
-        onUploadError={(error: Error) => {
-          // Do something with the error.
-          alert(`ERROR! ${error.message}`);
-        }}
-      />
+              <div className="py-3 flex flex-col gap-3">
+               <p className="text-sm">Choose Images:</p>
+              <UploadButton
+                 endpoint="imageUploader"
+                 onClientUploadComplete={(res) => {
+                 setImages(res)
+                
+               }}
+                 onUploadError={(error: Error) => {
+                 }}
+                 />
+                 <div className="flex items-center gap-2">
+                {newImages}
+                </div>
+              </div>
 
 
-  {newImages}
+
+
+
                    
                 </div>
         </div>

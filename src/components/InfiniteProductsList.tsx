@@ -44,7 +44,7 @@ export function InfiniteProductsList({products, isError, isLoading, hasMore = fa
     
 
 
-    return <ul>
+    return <ul className=" ">
         <InfiniteScroll
         dataLength={products.length}
         next={fetchNewProducts}
@@ -75,14 +75,10 @@ function ProductCard({ id, description, variants, images, createdAt} : Product) 
     
     const [currentColorValue, setCurrentColorValue] = useState<Variant[]>() 
     const [currentSizeValue, setCurrentSizeValue] = useState<Variant[]>()
-
-    
-  const result = currentColorValue?.filter((colorarr ) => {
+    const result = currentColorValue?.filter((colorarr ) => {
       return currentSizeValue?.find((sizearr) => sizearr.color === colorarr.color && sizearr.size === colorarr.size)
   })
-
-  const qty1 = result?.map(r => r?.qty)
-  
+    const qty1 = result?.map(r => r?.qty)
     const colorVariants = variants?.map(variant => {
        return variant.color
    })
@@ -90,30 +86,25 @@ function ProductCard({ id, description, variants, images, createdAt} : Product) 
     const sizeVariants = variants?.map(variant => {
         return variant.size
     })
-     const nonDuplicateSize = sizeVariants?.filter((size, index) => sizeVariants.indexOf(size) === index)
-   
+    const nonDuplicateSize = sizeVariants?.filter((size, index) => sizeVariants.indexOf(size) === index)
+    const [colorValue, setColorValue] = useState<string>()
+    const [sizeValue, setSizeValue] = useState<string>()
     
-     const [colorValue, setColorValue] = useState<string>()
-     console.log(colorValue)
-     const [sizeValue, setSizeValue] = useState<string>()
-     console.log(sizeValue)
 
     return <li className="flex gap-4 border-b px-4 py-4">
         <Link href={`/products/${id}`}>
             <p className="whitespace-pre-wrap">{description}</p>
         </Link>
-        <button className="" onClick={() => {
-            deleteProduct.mutate({id: id})
-        }}>delete product</button>
-
-        <div>{dateTimeFormatter.format(createdAt)}</div>
-        <div>
-           
-              
-                <div className="bg-[pink] flex flex-col gap-3">
+       
+         <div className="w-30 h-auto">
+            {images &&  <img  className="w-[8rem] " src={images[0]?.fileUrl}/>} 
+        </div>
+       
+        <div className="flex flex-col gap-3 ">
+           <div className=" flex flex-col gap-3">
                    <div className="flex gap-2"> {nonDuplicateColor?.map((color, i) => <div
                    key={i}  
-                   className={colorValue === color ? `bg-[blue]` : `bg-[pink]`   }
+                   className={colorValue === color ? `bg-[black] text-white p-2 text-sm` : `bg-[white] text-sm border-[1px] border-zinc-800  p-2`   }
             
                    onClick={() => {
                        setColorValue(color)
@@ -122,7 +113,7 @@ function ProductCard({ id, description, variants, images, createdAt} : Product) 
                    }}>{color}</div>)}</div>
                    <div className="flex gap-2">{nonDuplicateSize?.map((size, i) => <div 
                     key={i} 
-                    className={sizeValue === size ? `bg-[blue]` : `bg-[pink]`}
+                    className={sizeValue === size ?  `bg-[black] text-white p-2 text-sm` : `bg-[white] text-sm border-[1px] border-zinc-800  p-2`}
                     onClick={() => {
                         setSizeValue(size)
                         console.log(size, sizeValue)
@@ -131,12 +122,13 @@ function ProductCard({ id, description, variants, images, createdAt} : Product) 
                         
 
                    }}>{size}</div>)}</div>
-                   <div>{qty1 && qty1 || 0}pieces</div>
-                   <div>
-                       {images?.map(image => <img key={image.fileKey} src={image.fileUrl} width={100} height={30}  alt="image" />)}
-                   </div>
-                   <div className="flex gap-2">{variants?.map((variant,i) => <div key={i}>{variant.qty}</div>)}</div>  
+                   <div>{qty1 && qty1 || 0} qty</div>
+                  
                 </div>
+                <div>{dateTimeFormatter.format(createdAt)}</div>
+                <button className="" onClick={() => {
+                     deleteProduct.mutate({id: id})
+                  }}>delete product</button>
         </div>
        
 
